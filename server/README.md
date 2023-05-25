@@ -12,5 +12,5 @@ $ curl -X POST http://localhost:8080/auth/login -d '{"username": "john", "passwo
 {"access_token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2Vybm..."}
 
 А ниже пример вызова приватного метода
-$ curl http://localhost:3000/auth/profile -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2Vybm..."
+$ curl http://localhost:8080/auth/profile -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2Vybm..."
 {"sub":1,"username":"john","iat":...,"exp":...}
