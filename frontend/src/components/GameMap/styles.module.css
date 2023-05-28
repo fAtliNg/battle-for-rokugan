@@ -1,0 +1,7 @@
+.province {
+    cursor: pointer;
+}
+
+.province:hover {
+    opacity: 0.7;
+}
