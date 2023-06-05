@@ -1,12 +1,16 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
-import { GameMap } from './components/GameMap/GameMap';
+import { GameMap } from './components/GameMap';
+import { mapData } from './components/GameMap/data';
+import { IRegion } from './components/GameMap/types';
 
 function App() {
   return (
     <div className="App">
-      <GameMap />
+      <GameMap 
+        data={mapData as IRegion[]}
+        onProvinceClick={(currentProvince) => {
+          console.log(currentProvince)
+        }} 
+      />
     </div>
   );
 }

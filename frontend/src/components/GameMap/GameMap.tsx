@@ -1,44 +1,46 @@
-import { FC } from "react"
-import { mockData } from "./mock"
+import { FC } from "react";
+import { GameMapBackground } from "../GameMapBackground";
+import { Province } from "./style";
+import { IGameMap } from "./types";
 
-import classes from './styles.module.css'
+const GameMap: FC<IGameMap> = ({ 
+  data, 
+  onProvinceClick,
+  borderSettings = { stroke: '#000', strokeWidth: 3 } 
+}) => {
 
-const GameMap: FC = () => {
-    const clickHandler = () => {
-        alert('hello')
-    }
+  return (
+    <svg
+      version="1.1"
+      id="game-map"
+      xmlns="http://www.w3.org/2000/svg"
+      xmlnsXlink="http://www.w3.org/1999/xlink"
+      x="0px"
+      y="0px" 
+      viewBox="0 0 1920 1080"
+      xmlSpace="preserve"
+    >
+			<GameMapBackground />
+      {
+        <>
+          {data.map(region => (
+            <g key={region.id}>
+              {region.provinces.map(province => (
+                <Province
+                  onClick={() => { onProvinceClick(province) }}
+									key={province.id}
+                  d={province.d}
+                  fill={province.fill}
+                  strokeMiterlimit={10}
+									{...borderSettings}
+                />
+              ))}
+            </g>
+          ))}
+        </>
+      }
+    </svg>
+  );
+};
 
-   return (
-        <svg 
-            version="1.1" 
-            id="game-map" 
-            xmlns="http://www.w3.org/2000/svg" 
-            xmlnsXlink="http://www.w3.org/1999/xlink" 
-            x="0px" y="0px"
-            viewBox="0 0 1915.5 1077.4"  
-            xmlSpace="preserve"
-        >
-            {
-                <>
-                    {mockData.map(region => (
-                        <g>
-                            {region.provinces.map(province => (
-                                <path
-                                    onClick={clickHandler}
-                                    className={classes.province} 
-                                    d={province.d} 
-                                    fill={province.settings.fill} 
-                                    stroke={province.settings.stroke} 
-                                    strokeWidth={province.settings.strokeWidth}
-                                    strokeMiterlimit={province.settings.strokeMiterlimit} 
-                                />
-                            ))}
-                        </g>
-                    ))}
-                </>
-            }
-        </svg>
-   )
-}
-
-export { GameMap }
+export { GameMap };
