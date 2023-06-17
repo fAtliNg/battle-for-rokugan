@@ -31,18 +31,24 @@ export interface IToken {
     blessing?: number[]
 }
 
+export interface ICapital {
+    fill: string
+    d: string
+}
+
 export interface IProvince {
     type: EAreaType.Province
     id: string
     d: string
     fill: string
     coastalArea: boolean
-    capital?: string
+    capital?: ICapital[]
     defense: IToken[]
     underAttack: IToken[]
     attack: IToken[]
     effects: EAreaEffects[]
     landlord: string | null
+    defensePoints?: number
 
 }
 

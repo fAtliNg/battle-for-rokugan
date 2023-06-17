@@ -6,7 +6,7 @@ function App() {
   return (
     <div className="App">
       <GameMap 
-        data={mapData as IRegion[]}
+        data={mapData as any[]}
         onProvinceClick={(currentProvince) => {
           console.log(currentProvince)
         }} 
