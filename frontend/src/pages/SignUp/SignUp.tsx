@@ -13,12 +13,8 @@ import {
 } from "@chakra-ui/react"
 import { Logo } from "./Logo"
 import { PasswordField } from "../../components/PasswordField/PasswordField"
-import { useNavigate } from "react-router-dom"
-import { routes } from "../../constants"
 
-export const Login: FC = memo(() => {
-  const navigate = useNavigate()
-
+export const SignUp: FC = memo(() => {
   return (
     <Container
       maxW="lg"
@@ -29,18 +25,7 @@ export const Login: FC = memo(() => {
         <Stack spacing="6">
           <Logo />
           <Stack spacing={{ base: "2", md: "3" }} textAlign="center">
-            <Heading>Войдите в свой аккаунт</Heading>
-            <Text color="fg.muted">
-              У вас нет аккаунта?{" "}
-              <Link
-                color="blue.400"
-                onClick={() => {
-                  navigate(routes.signUp)
-                }}
-              >
-                Зарегистрируйтесь
-              </Link>
-            </Text>
+            <Heading>Регистрация</Heading>
           </Stack>
         </Stack>
         <Box
@@ -52,11 +37,12 @@ export const Login: FC = memo(() => {
         >
           <Stack spacing="6">
             <Stack spacing="5">
-              <FormControl>
+              <FormControl isRequired>
                 <FormLabel>Логин</FormLabel>
                 <Input id="email" type="email" />
               </FormControl>
-              <PasswordField label="Пароль" />
+              <PasswordField label="Пароль" isRequired />
+              <PasswordField label="Подтвердите пароль" isRequired />
             </Stack>
             <Stack spacing="6">
               <Button bg="blue.400" color="white" _hover={{ bg: "blue.500" }}>
