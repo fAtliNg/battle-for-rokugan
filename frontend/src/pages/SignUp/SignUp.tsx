@@ -13,8 +13,12 @@ import {
 } from "@chakra-ui/react"
 import { Logo } from "./Logo"
 import { PasswordField } from "../../components/PasswordField/PasswordField"
+import { routes } from "../../constants"
+import { useNavigate } from "react-router-dom"
 
 export const SignUp: FC = memo(() => {
+  const navigate = useNavigate()
+
   return (
     <Container
       maxW="lg"
@@ -51,6 +55,21 @@ export const SignUp: FC = memo(() => {
             </Stack>
           </Stack>
         </Box>
+        <Stack spacing="6">
+          <Stack spacing={{ base: "2", md: "3" }} textAlign="center">
+            <Text color="fg.muted">
+              У вас уже есть аккаунт?{" "}
+              <Link
+                color="blue.400"
+                onClick={() => {
+                  navigate(routes.login)
+                }}
+              >
+                Авторизуйтесь
+              </Link>
+            </Text>
+          </Stack>
+        </Stack>
       </Stack>
     </Container>
   )
