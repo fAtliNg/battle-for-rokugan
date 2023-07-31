@@ -2,7 +2,6 @@ import { FC, useMemo } from "react";
 import { GameMapBackground } from "../GameMapBackground";
 import { Province } from "./style";
 import { ICapital, IGameMap } from "./types";
-import { ReactComponent as Test } from './CAPITAL-TOKENS_Монтажная область 1 копия.svg'
 
 const GameMap: FC<IGameMap> = ({
   data,

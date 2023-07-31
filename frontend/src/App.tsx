@@ -1,18 +1,30 @@
-import { GameMap } from './components/GameMap';
-import { mapData } from './components/GameMap/data';
-import { IRegion } from './components/GameMap/types';
+import { GameMap } from "./components/GameMap"
+import { mapData } from "./components/GameMap/data"
+import { Routes, Route, BrowserRouter } from "react-router-dom"
+import { routes } from "./constants"
+import { Login } from "./pages/Login"
 
 function App() {
   return (
     <div className="App">
-      <GameMap 
-        data={mapData as any[]}
-        onProvinceClick={(currentProvince) => {
-          console.log(currentProvince)
-        }} 
-      />
+      <BrowserRouter>
+        <Routes>
+          <Route path={routes.login} element={<Login />} />
+          <Route
+            path={routes.main}
+            element={
+              <GameMap
+                data={mapData as any[]}
+                onProvinceClick={(currentProvince) => {
+                  console.log(currentProvince)
+                }}
+              />
+            }
+          />
+        </Routes>
+      </BrowserRouter>
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
