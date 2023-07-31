@@ -32,7 +32,7 @@ export const SignUp: FC = memo(() => {
           py={{ base: "0", sm: "8" }}
           px={{ base: "4", sm: "10" }}
           bg={{ base: "transparent", sm: "bg.surface" }}
-          boxShadow={{ base: "none", sm: "md" }}
+          boxShadow="base"
           borderRadius={{ base: "none", sm: "xl" }}
         >
           <Stack spacing="6">

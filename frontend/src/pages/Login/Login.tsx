@@ -47,7 +47,7 @@ export const Login: FC = memo(() => {
           py={{ base: "0", sm: "8" }}
           px={{ base: "4", sm: "10" }}
           bg={{ base: "transparent", sm: "bg.surface" }}
-          boxShadow={{ base: "none", sm: "md" }}
+          boxShadow="base"
           borderRadius={{ base: "none", sm: "xl" }}
         >
           <Stack spacing="6">
@@ -60,7 +60,7 @@ export const Login: FC = memo(() => {
             </Stack>
             <Stack spacing="6">
               <Button bg="blue.400" color="white" _hover={{ bg: "blue.500" }}>
-                Зарегистрироваться
+                Войти
               </Button>
             </Stack>
           </Stack>
