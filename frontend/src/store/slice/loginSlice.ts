@@ -3,15 +3,11 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 interface ILoginState {
   error: string
   isLoading: boolean
-  token: string
-  login: string
 }
 
 const initialState: ILoginState = {
   error: "",
   isLoading: false,
-  token: "",
-  login: "",
 }
 
 export const loginSlice = createSlice({
@@ -24,8 +20,7 @@ export const loginSlice = createSlice({
     ) => {
       state.isLoading = true
     },
-    loginSuccess: (state, { payload }: PayloadAction<string>) => {
-      state.token = payload
+    loginSuccess: (state) => {
       state.isLoading = false
       state.error = ""
     },
@@ -39,9 +34,8 @@ export const loginSlice = createSlice({
     ) => {
       state.isLoading = true
     },
-    signUpSuccess: (state, { payload }: PayloadAction<string>) => {
+    signUpSuccess: (state) => {
       state.isLoading = false
-      state.token = payload
     },
     signUpFail: (state, { payload }: PayloadAction<string>) => {
       state.isLoading = false

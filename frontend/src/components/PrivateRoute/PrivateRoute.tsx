@@ -5,7 +5,7 @@ import { RootState } from "../../store"
 import { routes } from "../../constants"
 
 const PrivateRoute = () => {
-  const { token } = useSelector((state: RootState) => state.login)
+  const { token } = useSelector((state: RootState) => state.userInfo)
 
   return token ? <Outlet /> : <Navigate to={routes.login} />
 }
