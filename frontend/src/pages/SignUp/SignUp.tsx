@@ -1,4 +1,4 @@
-import React, { FC, memo } from "react"
+import React, { ChangeEvent, FC, memo, useState } from "react"
 import {
   Box,
   Button,
@@ -15,9 +15,30 @@ import { Logo } from "./Logo"
 import { PasswordField } from "../../components/PasswordField/PasswordField"
 import { routes } from "../../constants"
 import { useNavigate } from "react-router-dom"
+import { useDispatch } from "react-redux"
+import { loginActions } from "../../store/slice/loginSlice"
 
 export const SignUp: FC = memo(() => {
+  const dispatch = useDispatch()
   const navigate = useNavigate()
+  const [login, setLogin] = useState("")
+  const [password, setPassword] = useState("")
+  const [confirmPassword, setConfirmPassword] = useState("")
+
+  const onSubmit = () => {
+    if (password && password === confirmPassword) {
+      dispatch(loginActions.signUpStart({ password, login }))
+    }
+  }
+
+  const onChangeLogin = (e: ChangeEvent<HTMLInputElement>) =>
+    setLogin(e.target.value)
+
+  const onChangePassword = (e: ChangeEvent<HTMLInputElement>) =>
+    setPassword(e.target.value)
+
+  const onChangeConfirmPassword = (e: ChangeEvent<HTMLInputElement>) =>
+    setConfirmPassword(e.target.value)
 
   return (
     <Container
@@ -43,13 +64,41 @@ export const SignUp: FC = memo(() => {
             <Stack spacing="5">
               <FormControl isRequired>
                 <FormLabel>Логин</FormLabel>
-                <Input id="email" type="email" />
+                <Input value={login} onChange={onChangeLogin} />
               </FormControl>
-              <PasswordField label="Пароль" isRequired />
-              <PasswordField label="Подтвердите пароль" isRequired />
+              <PasswordField
+                label="Пароль"
+                value={password}
+                onChange={onChangePassword}
+                isRequired
+                isInvalid={
+                    !!password &&
+                    !!confirmPassword &&
+                    password !== confirmPassword
+                }
+                error="Пароли не совпадают"
+              />
+              <PasswordField
+                label="Подтвердите пароль"
+                value={confirmPassword}
+                onChange={onChangeConfirmPassword}
+                isRequired
+                isInvalid={
+                  !!password &&
+                  !!confirmPassword &&
+                  password !== confirmPassword
+                }
+                error="Пароли не совпадают"
+              />
             </Stack>
             <Stack spacing="6">
-              <Button bg="blue.400" color="white" _hover={{ bg: "blue.500" }}>
+              <Button
+                bg="blue.400"
+                color="white"
+                _hover={{ bg: "blue.500" }}
+                onClick={onSubmit}
+                isDisabled={!login || !password || password !== confirmPassword}
+              >
                 Зарегистрироваться
               </Button>
             </Stack>

@@ -4,6 +4,7 @@ import { Routes, Route, BrowserRouter } from "react-router-dom"
 import { routes } from "./constants"
 import { Login } from "./pages/Login"
 import { SignUp } from "./pages/SignUp"
+import { PrivateRoute } from "./components/PrivateRoute"
 
 function App() {
   return (
@@ -12,17 +13,19 @@ function App() {
         <Routes>
           <Route path={routes.login} element={<Login />} />
           <Route path={routes.signUp} element={<SignUp />} />
-          <Route
-            path={routes.main}
-            element={
-              <GameMap
-                data={mapData as any[]}
-                onProvinceClick={(currentProvince) => {
-                  console.log(currentProvince)
-                }}
-              />
-            }
-          />
+          <Route path={routes.main} element={<PrivateRoute />}>
+            <Route
+              path={routes.main}
+              element={
+                <GameMap
+                  data={mapData as any[]}
+                  onProvinceClick={(currentProvince) => {
+                    console.log(currentProvince)
+                  }}
+                />
+              }
+            />
+          </Route>
         </Routes>
       </BrowserRouter>
     </div>

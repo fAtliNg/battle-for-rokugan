@@ -1,9 +1,10 @@
-import React, { FC, memo } from "react"
+import React, { ChangeEvent, FC, memo, useEffect, useState } from "react"
 import {
   Box,
   Button,
   Container,
   FormControl,
+  FormErrorMessage,
   FormLabel,
   Heading,
   Input,
@@ -15,9 +16,32 @@ import { Logo } from "./Logo"
 import { PasswordField } from "../../components/PasswordField/PasswordField"
 import { useNavigate } from "react-router-dom"
 import { routes } from "../../constants"
+import { useDispatch, useSelector } from "react-redux"
+import { loginActions } from "../../store/slice/loginSlice"
+import { RootState } from "../../store"
 
 export const Login: FC = memo(() => {
+  const dispatch = useDispatch()
   const navigate = useNavigate()
+  const { isLoading, error } = useSelector((state: RootState) => state.login)
+  const [login, setLogin] = useState("")
+  const [password, setPassword] = useState("")
+
+  useEffect(() => {
+    return () => {
+      dispatch(loginActions.setError(""))
+    }
+  }, [])
+
+  const onChangeLogin = (e: ChangeEvent<HTMLInputElement>) =>
+    setLogin(e.target.value)
+
+  const onChangePassword = (e: ChangeEvent<HTMLInputElement>) =>
+    setPassword(e.target.value)
+
+  const onSubmit = () => {
+    dispatch(loginActions.loginStart({ login, password }))
+  }
 
   return (
     <Container
@@ -52,14 +76,34 @@ export const Login: FC = memo(() => {
         >
           <Stack spacing="6">
             <Stack spacing="5">
-              <FormControl>
+              <FormControl
+                isInvalid={!!error}
+                isDisabled={isLoading}
+                isRequired
+              >
                 <FormLabel>Логин</FormLabel>
-                <Input id="email" type="email" />
+                <Input value={login} onChange={onChangeLogin} />
+                {error && <FormErrorMessage>{error}</FormErrorMessage>}
               </FormControl>
-              <PasswordField label="Пароль" />
+              <PasswordField
+                label="Пароль"
+                value={password}
+                onChange={onChangePassword}
+                isDisabled={isLoading}
+                isRequired
+                isInvalid={!!error}
+                error={error}
+              />
             </Stack>
             <Stack spacing="6">
-              <Button bg="blue.400" color="white" _hover={{ bg: "blue.500" }}>
+              <Button
+                bg="blue.400"
+                color="white"
+                _hover={{ bg: "blue.500" }}
+                onClick={onSubmit}
+                isLoading={isLoading}
+                isDisabled={!login || !password}
+              >
                 Войти
               </Button>
             </Stack>
