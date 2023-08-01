@@ -17,7 +17,7 @@ export function* loginStart({
     yield put(userInfoActions.setToken(token))
     window.location.pathname = routes.main
   } catch (e: any) {
-    yield put(loginActions.loginFail(e?.response?.data))
+    yield put(loginActions.loginFail(e?.response?.data?.message))
   }
 }
 
@@ -33,6 +33,6 @@ export function* signUpStart({
     yield put(userInfoActions.setToken(token))
     window.location.pathname = routes.main
   } catch (e: any) {
-    yield put(loginActions.signUpFail(e?.response?.data))
+    yield put(loginActions.signUpFail(e?.response?.data?.message))
   }
 }

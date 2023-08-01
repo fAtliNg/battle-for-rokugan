@@ -1,9 +1,10 @@
-import React, { ChangeEvent, FC, memo, useState } from "react"
+import React, { ChangeEvent, FC, memo, useEffect, useState } from "react"
 import {
   Box,
   Button,
   Container,
   FormControl,
+  FormErrorMessage,
   FormLabel,
   Heading,
   Input,
@@ -15,15 +16,23 @@ import { Logo } from "./Logo"
 import { PasswordField } from "../../components/PasswordField/PasswordField"
 import { routes } from "../../constants"
 import { useNavigate } from "react-router-dom"
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { loginActions } from "../../store/slice/loginSlice"
+import { RootState } from "../../store"
 
 export const SignUp: FC = memo(() => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
+  const { isLoading, error } = useSelector((state: RootState) => state.login)
   const [login, setLogin] = useState("")
   const [password, setPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
+
+  useEffect(() => {
+    return () => {
+      dispatch(loginActions.setError(""))
+    }
+  }, [])
 
   const onSubmit = () => {
     if (password && password === confirmPassword) {
@@ -62,9 +71,14 @@ export const SignUp: FC = memo(() => {
         >
           <Stack spacing="6">
             <Stack spacing="5">
-              <FormControl isRequired>
+              <FormControl
+                isRequired
+                isDisabled={isLoading}
+                isInvalid={!!error}
+              >
                 <FormLabel>Логин</FormLabel>
                 <Input value={login} onChange={onChangeLogin} />
+                {error && <FormErrorMessage>{error}</FormErrorMessage>}
               </FormControl>
               <PasswordField
                 label="Пароль"
@@ -72,11 +86,12 @@ export const SignUp: FC = memo(() => {
                 onChange={onChangePassword}
                 isRequired
                 isInvalid={
-                    !!password &&
-                    !!confirmPassword &&
-                    password !== confirmPassword
+                  !!password &&
+                  !!confirmPassword &&
+                  password !== confirmPassword
                 }
                 error="Пароли не совпадают"
+                isDisabled={isLoading}
               />
               <PasswordField
                 label="Подтвердите пароль"
@@ -89,6 +104,7 @@ export const SignUp: FC = memo(() => {
                   password !== confirmPassword
                 }
                 error="Пароли не совпадают"
+                isDisabled={isLoading}
               />
             </Stack>
             <Stack spacing="6">
@@ -98,6 +114,7 @@ export const SignUp: FC = memo(() => {
                 _hover={{ bg: "blue.500" }}
                 onClick={onSubmit}
                 isDisabled={!login || !password || password !== confirmPassword}
+                isLoading={isLoading}
               >
                 Зарегистрироваться
               </Button>

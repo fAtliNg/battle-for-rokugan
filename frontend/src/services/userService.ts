@@ -11,7 +11,7 @@ export interface ISignUpPayload {
 }
 
 export const signUpService = (data: ISignUpPayload) =>
-  axiosInstance.post(`/auth/sign-up`, data)
+  axiosInstance.post(`/api/auth/sign-up`, data)
 
 export const loginService = (data: ILoginPayload) =>
-  axiosInstance.post(`/auth/log-in`, data)
+  axiosInstance.post(`/api/auth/log-in`, data)
