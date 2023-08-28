@@ -37,3 +37,20 @@ export const TDStyled = styled.td`
   width: 87px;
   height: 87px;
 `
+
+export const WinnerBannerStyled = styled.div`
+  position: absolute;
+  width: 268px;
+  height: 267px;
+  background: #4fd1c5;
+  z-index: 2;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`
+
+export const WrapWinnerStyled = styled.div`
+  display: flex;
+  margin-top: 40px;
+`

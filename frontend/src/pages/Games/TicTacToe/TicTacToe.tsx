@@ -9,8 +9,11 @@ import {
   TDStyled,
   XStyled,
   OStyled,
+  WinnerBannerStyled,
+  WrapWinnerStyled,
 } from "./styles"
 import { getMove } from "./minimax"
+import { Heading } from "@chakra-ui/react"
 
 export const TicTacToe: FC = memo(() => {
   const [position, setPosition] = useState(defaultPosition)
@@ -20,6 +23,10 @@ export const TicTacToe: FC = memo(() => {
   useEffect(() => {
     if (whoMove === "O" && !winner) {
       const move = getMove(position, whoMove)
+      if (!move) {
+        setWhoMove("")
+        return
+      }
       let newPosition = [...position]
       newPosition[move[0]][move[1]] = whoMove
       setPosition(newPosition)
@@ -74,6 +81,17 @@ export const TicTacToe: FC = memo(() => {
           ))}
         </TBodyStyled>
       </TableStyled>
+      {(winner || !whoMove) && (
+        <WinnerBannerStyled>
+          <WrapWinnerStyled>
+            {(winner === "X" || !whoMove) && <XStyled />}
+            {(winner === "O" || !whoMove) && <OStyled />}
+          </WrapWinnerStyled>
+          <Heading as="h2" size="2xl" noOfLines={1} color="green.900">
+            Победитель!
+          </Heading>
+        </WinnerBannerStyled>
+      )}
     </RootStyled>
   )
 })
