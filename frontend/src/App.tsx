@@ -5,6 +5,7 @@ import { routes } from "./constants"
 import { Login } from "./pages/Login"
 import { SignUp } from "./pages/SignUp"
 import { PrivateRoute } from "./components/PrivateRoute"
+import { TicTacToe } from "./pages/Games"
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         <Routes>
           <Route path={routes.login} element={<Login />} />
           <Route path={routes.signUp} element={<SignUp />} />
+          <Route path={routes.ticTacToe} element={<TicTacToe />} />
           <Route path={routes.main} element={<PrivateRoute />}>
             <Route
               path={routes.main}
