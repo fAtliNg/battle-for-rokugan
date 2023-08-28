@@ -1,4 +1,4 @@
-import React, { FC, memo, useState } from "react"
+import React, { FC, memo, useEffect, useState } from "react"
 import { winPosition, includes, defaultPosition } from "./utils"
 import {
   RootStyled,
@@ -10,11 +10,23 @@ import {
   XStyled,
   OStyled,
 } from "./styles"
+import { getMove } from "./minimax"
 
 export const TicTacToe: FC = memo(() => {
   const [position, setPosition] = useState(defaultPosition)
   const [whoMove, setWhoMove] = useState("X")
   const [winner, setWinner] = useState("")
+
+  useEffect(() => {
+    if (whoMove === "O" && !winner) {
+      const move = getMove(position, whoMove)
+      let newPosition = [...position]
+      newPosition[move[0]][move[1]] = whoMove
+      setPosition(newPosition)
+      setWhoMove("X")
+      checkWinner()
+    }
+  }, [whoMove])
 
   const checkWinner = () => {
     const xIndices: number[] = []
