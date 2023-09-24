@@ -7,7 +7,7 @@ export const axiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(function (config) {
   const token = store.getState().userInfo.token
-  config.headers.token = token
+  config.headers["Auth-Token"] = token
 
   return config
 })

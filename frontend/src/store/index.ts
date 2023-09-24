@@ -2,6 +2,7 @@ import { configureStore } from "@reduxjs/toolkit"
 import createSagaMiddleware from "redux-saga"
 import loginReducer from "./slice/loginSlice"
 import userInfoReducer from "./slice/userInfoSlice"
+import ticTacToeReducer from "./slice/ticTacToe"
 import { rootSaga } from "./sagas"
 import { loadFromLocalStorage, saveToLocalStorage } from "./localStorage"
 import { authInterceptor } from "./authInterceptor"
@@ -12,6 +13,7 @@ export const store = configureStore({
   reducer: {
     login: loginReducer,
     userInfo: userInfoReducer,
+    ticTacToe: ticTacToeReducer,
   },
   preloadedState: loadFromLocalStorage(),
   middleware: (getDefaultMiddleware) => {

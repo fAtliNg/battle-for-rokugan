@@ -5,6 +5,15 @@ import { ReactComponent as O } from "./icons/o.svg"
 
 export const RootStyled = styled.div`
   display: flex;
+  text-align: center;
+  gap: 32px;
+  flex-direction: column;
+  width: 300px;
+  margin: auto;
+`
+
+export const WrapBoardStyled = styled.div`
+  display: flex;
   justify-content: center;
   margin-top: 200px;
 `
@@ -34,6 +43,7 @@ export const TableStyled = styled.table`
 export const TBodyStyled = styled.tbody``
 export const TRStyled = styled.tr``
 export const TDStyled = styled.td`
+  cursor: pointer;
   width: 87px;
   height: 87px;
 `

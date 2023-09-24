@@ -17,6 +17,14 @@ const getAvailableMoves = (position: string[][], whoMove: string) => {
 }
 
 export const getMove = (position: string[][], whoMove: string) => {
+  // let moves = []
+  // const minimax = (position: string[][], whoMove: string) => {
+  //   const availableMoves = getAvailableMoves(position, whoMove)
+  //   moves.push({
+  //     moves: availableMoves,
+  //     whoMove,
+  //   })
+  // }
   const availableMoves = getAvailableMoves(position, whoMove)
   const randomMove = availableMoves[getRandomInt(0, availableMoves.length - 1)]
   return randomMove

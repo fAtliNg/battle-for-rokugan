@@ -79,5 +79,5 @@
     "eslint-plugin-storybook": "0.6.10",
     "prettier": "^2.8.3"
   },
-  "proxy": "http://denisenkodenis.ru:4444"
+  "proxy": "https://clip-clop.ru"
 }
