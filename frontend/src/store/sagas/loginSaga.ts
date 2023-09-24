@@ -31,7 +31,7 @@ export function* signUpStart({
     yield put(loginActions.signUpSuccess())
     yield put(userInfoActions.setLogin(payload.login))
     yield put(userInfoActions.setToken(token))
-    window.location.pathname = routes.main
+    window.location.pathname = routes.ticTacToe
   } catch (e: any) {
     yield put(loginActions.signUpFail(e?.response?.data?.message))
   }

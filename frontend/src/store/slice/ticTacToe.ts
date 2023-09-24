@@ -6,13 +6,21 @@ export enum EGameStatus {
   UNKNOWN = "UNKNOWN",
 }
 
-interface ITicTacToeState {
+export interface ITicTacToeState {
   isSearch: boolean
   gameId: string
   playerO: string
   playerX: string
   status: EGameStatus
-  position: string[][]
+  position: { fields: string[][] }
+}
+
+const defaultPosition = {
+  fields: [
+    ["EMPTY", "EMPTY", "EMPTY"],
+    ["EMPTY", "EMPTY", "EMPTY"],
+    ["EMPTY", "EMPTY", "EMPTY"],
+  ],
 }
 
 const initialState: ITicTacToeState = {
@@ -21,7 +29,7 @@ const initialState: ITicTacToeState = {
   playerO: "",
   playerX: "",
   status: EGameStatus.UNKNOWN,
-  position: [[], [], []],
+  position: defaultPosition,
 }
 
 export const ticTacToeSlice = createSlice({
@@ -34,6 +42,7 @@ export const ticTacToeSlice = createSlice({
     searchGameStart: (state) => {
       state.isSearch = true
     },
+    moveStart: (state, {}: PayloadAction<ITicTacToeState>) => {},
     setGameId: (state, { payload }: PayloadAction<string>) => {
       state.gameId = payload
     },
@@ -48,7 +57,10 @@ export const ticTacToeSlice = createSlice({
     setStatus: (state, { payload }: PayloadAction<EGameStatus>) => {
       state.status = payload
     },
-    setPosition: (state, { payload }: PayloadAction<string[][]>) => {
+    setPosition: (
+      state,
+      { payload }: PayloadAction<{ fields: string[][] }>
+    ) => {
       state.position = payload
     },
     clear: () => {

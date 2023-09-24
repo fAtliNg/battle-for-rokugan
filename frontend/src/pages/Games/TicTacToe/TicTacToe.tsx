@@ -22,11 +22,16 @@ import { EGameStatus, ticTacToeActions } from "../../../store/slice/ticTacToe"
 export const TicTacToe: FC = memo(() => {
   const dispatch = useDispatch()
   const ref = useRef()
-  const { isSearch, status, playerX, playerO } = useSelector(
-    (state: RootState) => state.ticTacToe
-  )
+  const {
+    isSearch,
+    status,
+    playerX,
+    playerO,
+    gameId,
+    position: { fields: position },
+  } = useSelector((state: RootState) => state.ticTacToe)
   const { login } = useSelector((state: RootState) => state.userInfo)
-  const [position, setPosition] = useState(defaultPosition)
+  // const [position, setPosition] = useState(defaultPosition)
   const [whoMove, setWhoMove] = useState("X")
   const [winner, setWinner] = useState("")
 
@@ -39,7 +44,7 @@ export const TicTacToe: FC = memo(() => {
       }
       let newPosition = [...position]
       newPosition[move[0]][move[1]] = whoMove
-      setPosition(newPosition)
+      dispatch(ticTacToeActions.setPosition({ fields: newPosition }))
       setWhoMove("X")
       checkWinner()
     }
@@ -72,15 +77,33 @@ export const TicTacToe: FC = memo(() => {
     })
   }
 
+  const getNewPosition = (position: string[][], row: number, item: number) => {
+    let position0 = [...position[0]]
+    let position1 = [...position[1]]
+    let position2 = [...position[2]]
+    let newPosition = [position0, position1, position2]
+    newPosition[row][item] = whoMove
+
+    return newPosition
+  }
+
   const onClickItem = (row: number, item: number) => {
-    if (position[row][item] || winner || !checkYourMove()) {
+    if (position[row][item] !== "EMPTY" || winner || !checkYourMove()) {
       return
     }
-    let newPosition = [...position]
-    newPosition[row][item] = whoMove
-    setPosition(newPosition)
-    setWhoMove(whoMove === "X" ? "O" : "X")
-    checkWinner()
+    const newPosition = getNewPosition(position, row, item)
+    dispatch(
+      ticTacToeActions.moveStart({
+        gameId,
+        playerO,
+        position: { fields: newPosition },
+        playerX,
+        status,
+        isSearch,
+      })
+    )
+    // setWhoMove(whoMove === "X" ? "O" : "X")
+    // checkWinner()
   }
 
   const onStartSearch = () => {
