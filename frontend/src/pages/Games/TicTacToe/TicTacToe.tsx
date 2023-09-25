@@ -31,24 +31,36 @@ export const TicTacToe: FC = memo(() => {
     position: { fields: position },
   } = useSelector((state: RootState) => state.ticTacToe)
   const { login } = useSelector((state: RootState) => state.userInfo)
-  // const [position, setPosition] = useState(defaultPosition)
-  const [whoMove, setWhoMove] = useState("X")
-  const [winner, setWinner] = useState("")
 
-  useEffect(() => {
-    if (whoMove === "O" && !winner) {
-      const move = getMove(position, whoMove)
-      if (!move) {
-        setWhoMove("")
-        return
-      }
-      let newPosition = [...position]
-      newPosition[move[0]][move[1]] = whoMove
-      dispatch(ticTacToeActions.setPosition({ fields: newPosition }))
-      setWhoMove("X")
-      checkWinner()
+  const getWhoMove = () => {
+    if (status === EGameStatus.WAIT_X_MOVE) {
+      return "X"
+    } else if (status === EGameStatus.WAIT_O_MOVE) {
+      return "O"
+    } else if (status === EGameStatus.UNKNOWN) {
+      return EGameStatus.UNKNOWN
     }
-  }, [whoMove])
+    return ""
+  }
+
+  const getWinner = () => {
+    if (status === EGameStatus.X_WON) {
+      return "X"
+    } else if (status === EGameStatus.O_WON) {
+      return "O"
+    } else if (status === EGameStatus.DRAW) {
+      return "DRAW"
+    }
+    return ""
+  }
+
+  const isFinishGame = () => {
+    return (
+      status === EGameStatus.O_WON ||
+      status === EGameStatus.X_WON ||
+      status === EGameStatus.DRAW
+    )
+  }
 
   useEffect(() => {
     if (isSearch) {
@@ -58,37 +70,18 @@ export const TicTacToe: FC = memo(() => {
     }
   }, [isSearch])
 
-  const checkWinner = () => {
-    const xIndices: number[] = []
-    const oIndices: number[] = []
-    position.forEach((row, rowIndex) => {
-      row.forEach((item, itemIndex) => {
-        if (item === "X") {
-          xIndices.push(rowIndex * 3 + itemIndex + 1)
-        } else if (item === "O") {
-          oIndices.push(rowIndex * 3 + itemIndex + 1)
-        }
-      })
-      if (includes(winPosition, xIndices)) {
-        setWinner("X")
-      } else if (includes(winPosition, oIndices)) {
-        setWinner("O")
-      }
-    })
-  }
-
   const getNewPosition = (position: string[][], row: number, item: number) => {
     let position0 = [...position[0]]
     let position1 = [...position[1]]
     let position2 = [...position[2]]
     let newPosition = [position0, position1, position2]
-    newPosition[row][item] = whoMove
+    newPosition[row][item] = getWhoMove()
 
     return newPosition
   }
 
   const onClickItem = (row: number, item: number) => {
-    if (position[row][item] !== "EMPTY" || winner || !checkYourMove()) {
+    if (position[row][item] !== "EMPTY" || getWinner() || !checkYourMove()) {
       return
     }
     const newPosition = getNewPosition(position, row, item)
@@ -102,8 +95,6 @@ export const TicTacToe: FC = memo(() => {
         isSearch,
       })
     )
-    // setWhoMove(whoMove === "X" ? "O" : "X")
-    // checkWinner()
   }
 
   const onStartSearch = () => {
@@ -151,14 +142,18 @@ export const TicTacToe: FC = memo(() => {
             ))}
           </TBodyStyled>
         </TableStyled>
-        {(winner || !whoMove) && (
+        {(getWinner() || !getWhoMove()) && isFinishGame() && (
           <WinnerBannerStyled>
             <WrapWinnerStyled>
-              {(winner === "X" || !whoMove) && <XStyled />}
-              {(winner === "O" || !whoMove) && <OStyled />}
+              {(getWinner() === "X" || getWinner() === EGameStatus.DRAW) && (
+                <XStyled />
+              )}
+              {(getWinner() === "O" || getWinner() === EGameStatus.DRAW) && (
+                <OStyled />
+              )}
             </WrapWinnerStyled>
             <Heading as="h2" size="xl" noOfLines={1} color="green.900">
-              Победитель!
+              {getWinner() === EGameStatus.DRAW ? "Ничья!" : "Победитель!"}
             </Heading>
           </WinnerBannerStyled>
         )}

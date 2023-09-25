@@ -14,8 +14,8 @@ function App() {
         <Routes>
           <Route path={routes.login} element={<Login />} />
           <Route path={routes.signUp} element={<SignUp />} />
-          <Route path={routes.ticTacToe} element={<TicTacToe />} />
           <Route path={routes.main} element={<PrivateRoute />}>
+            <Route path={routes.ticTacToe} element={<TicTacToe />} />
             <Route
               path={routes.main}
               element={

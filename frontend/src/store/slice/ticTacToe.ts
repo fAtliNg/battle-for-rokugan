@@ -3,6 +3,9 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 export enum EGameStatus {
   WAIT_X_MOVE = "WAIT_X_MOVE",
   WAIT_O_MOVE = "WAIT_O_MOVE",
+  X_WON = "X_WON",
+  O_WON = "O_WON",
+  DRAW = "DRAW",
   UNKNOWN = "UNKNOWN",
 }
 

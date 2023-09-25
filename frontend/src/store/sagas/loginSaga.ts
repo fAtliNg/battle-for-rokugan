@@ -15,7 +15,7 @@ export function* loginStart({
     yield put(loginActions.loginSuccess())
     yield put(userInfoActions.setLogin(payload.login))
     yield put(userInfoActions.setToken(token))
-    window.location.pathname = routes.main
+    window.location.pathname = routes.ticTacToe
   } catch (e: any) {
     yield put(loginActions.loginFail(e?.response?.data?.message))
   }
