@@ -8,8 +8,10 @@ interface IGameGetPayload {
 export const gameJoin = () => axiosInstance.get(`/api/tick-tack-toe/game/join`)
 
 export const gameGet = (body: IGameGetPayload) =>
-  axiosInstance.post(`/api/tick-tack-toe/game/get`, body)
+  axiosInstance.get(`/api/tick-tack-toe/game/get?gameId=${body.gameId}`)
 
+export const gameDelete = (gameId: string) =>
+  axiosInstance.delete(`/api/tick-tack-toe/game/join?gameId=${gameId}`)
 
 export const move = (body: ITicTacToeState) =>
-  axiosInstance.post(`/api/tick-tack-toe/game/move`, body)
+  axiosInstance.put(`/api/tick-tack-toe/game/move`, body)

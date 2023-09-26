@@ -103,7 +103,7 @@ export const TicTacToe: FC = memo(() => {
   }
 
   const onStopSearch = () => {
-    dispatch(ticTacToeActions.setSearch(false))
+    dispatch(ticTacToeActions.stopGame(gameId))
   }
 
   const checkYourMove = () => {

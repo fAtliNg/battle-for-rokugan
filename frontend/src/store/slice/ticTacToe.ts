@@ -50,7 +50,7 @@ export const ticTacToeSlice = createSlice({
       state.gameId = payload
     },
     checkGameId: (state, {}: PayloadAction<string>) => {},
-
+    stopGame: (state, {}: PayloadAction<string>) => {},
     setPlayerX: (state, { payload }: PayloadAction<string>) => {
       state.playerX = payload
     },

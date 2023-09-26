@@ -1,6 +1,12 @@
 import { call, put, select, delay } from "redux-saga/effects"
 import { EGameStatus, ticTacToeActions } from "../slice/ticTacToe"
-import { gameGet, gameJoin, move } from "../../services/tiaTacToeService"
+import {
+  gameGet,
+  gameJoin,
+  move,
+  gameDelete,
+} from "../../services/tiaTacToeService"
+import {store} from "../index";
 
 export function* searchGameStart() {
   try {
@@ -17,6 +23,7 @@ export function* checkGameIdStart({
 }: ReturnType<typeof ticTacToeActions.checkGameId>): any {
   try {
     const { login } = yield select((state) => state.userInfo)
+    const { isSearch } = yield select((state) => state.ticTacToe)
     const { data } = yield call(gameGet, { gameId: payload })
     yield put(ticTacToeActions.setPlayerX(data.playerX))
     yield put(ticTacToeActions.setPlayerO(data.playerO))
@@ -24,7 +31,9 @@ export function* checkGameIdStart({
     yield put(ticTacToeActions.setPosition(data.position))
     if (!data.playerX || !data.playerO) {
       yield delay(1000)
-      yield put(ticTacToeActions.checkGameId(payload))
+      if (store.getState().ticTacToe.isSearch) {
+        yield put(ticTacToeActions.checkGameId(payload))
+      }
     } else {
       yield put(ticTacToeActions.setSearch(false))
     }
@@ -46,6 +55,17 @@ export function* moveStart({
   try {
     yield call(move, payload)
     yield put(ticTacToeActions.checkGameId(payload.gameId))
+  } catch (e: any) {
+    console.log(e)
+  }
+}
+
+export function* stopGame({
+  payload,
+}: ReturnType<typeof ticTacToeActions.stopGame>): any {
+  try {
+    yield call(gameDelete, payload)
+    yield put(ticTacToeActions.setSearch(false))
   } catch (e: any) {
     console.log(e)
   }
