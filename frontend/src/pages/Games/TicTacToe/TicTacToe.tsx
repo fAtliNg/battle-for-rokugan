@@ -18,6 +18,7 @@ import { Button, Heading } from "@chakra-ui/react"
 import { useDispatch, useSelector } from "react-redux"
 import { RootState } from "../../../store"
 import { EGameStatus, ticTacToeActions } from "../../../store/slice/ticTacToe"
+import { WithSubnavigation } from "../../../components/NavBar"
 
 export const TicTacToe: FC = memo(() => {
   const dispatch = useDispatch()
@@ -120,73 +121,76 @@ export const TicTacToe: FC = memo(() => {
   }
 
   return (
-    <RootStyled>
-      <WrapBoardStyled>
-        <BoardStyled />
-        <TableStyled>
-          <TBodyStyled>
-            {position.map((row, rowIndex) => (
-              <TRStyled>
-                {row.map((item, itemIndex) => (
-                  <TDStyled onClick={() => onClickItem(rowIndex, itemIndex)}>
-                    {item === "X" ? (
-                      <XStyled />
-                    ) : item === "O" ? (
-                      <OStyled />
-                    ) : (
-                      ""
-                    )}
-                  </TDStyled>
-                ))}
-              </TRStyled>
-            ))}
-          </TBodyStyled>
-        </TableStyled>
-        {(getWinner() || !getWhoMove()) && isFinishGame() && (
-          <WinnerBannerStyled>
-            <WrapWinnerStyled>
-              {(getWinner() === "X" || getWinner() === EGameStatus.DRAW) && (
-                <XStyled />
-              )}
-              {(getWinner() === "O" || getWinner() === EGameStatus.DRAW) && (
-                <OStyled />
-              )}
-            </WrapWinnerStyled>
-            <Heading as="h2" size="xl" noOfLines={1} color="green.900">
-              {getWinner() === EGameStatus.DRAW ? "Ничья!" : "Победитель!"}
-            </Heading>
-          </WinnerBannerStyled>
+    <>
+      <WithSubnavigation />
+      <RootStyled>
+        <WrapBoardStyled>
+          <BoardStyled />
+          <TableStyled>
+            <TBodyStyled>
+              {position.map((row, rowIndex) => (
+                <TRStyled>
+                  {row.map((item, itemIndex) => (
+                    <TDStyled onClick={() => onClickItem(rowIndex, itemIndex)}>
+                      {item === "X" ? (
+                        <XStyled />
+                      ) : item === "O" ? (
+                        <OStyled />
+                      ) : (
+                        ""
+                      )}
+                    </TDStyled>
+                  ))}
+                </TRStyled>
+              ))}
+            </TBodyStyled>
+          </TableStyled>
+          {(getWinner() || !getWhoMove()) && isFinishGame() && (
+            <WinnerBannerStyled>
+              <WrapWinnerStyled>
+                {(getWinner() === "X" || getWinner() === EGameStatus.DRAW) && (
+                  <XStyled />
+                )}
+                {(getWinner() === "O" || getWinner() === EGameStatus.DRAW) && (
+                  <OStyled />
+                )}
+              </WrapWinnerStyled>
+              <Heading as="h2" size="xl" noOfLines={1} color="green.900">
+                {getWinner() === EGameStatus.DRAW ? "Ничья!" : "Победитель!"}
+              </Heading>
+            </WinnerBannerStyled>
+          )}
+        </WrapBoardStyled>
+        {!isSearch && !checkYourMove() && !checkWaitOpponentMove() && (
+          <Button colorScheme="blue" onClick={onStartSearch}>
+            Найти игру
+          </Button>
         )}
-      </WrapBoardStyled>
-      {!isSearch && !checkYourMove() && !checkWaitOpponentMove() && (
-        <Button colorScheme="blue" onClick={onStartSearch}>
-          Найти игру
-        </Button>
-      )}
-      {isSearch && !checkYourMove() && !checkWaitOpponentMove() && (
-        <div onClick={onStopSearch} style={{ display: "contents" }}>
-          <Button
-            colorScheme="cyan"
-            isLoading
-            loadingText="Остановить"
-            // variant="outline"
-            spinnerPlacement="start"
-            isDisabled={false}
-            id="stopSearchButton"
-            variant="outline"
-          />
-        </div>
-      )}
-      {checkYourMove() && (
-        <Heading as="h4" size="md">
-          Ваш ход
-        </Heading>
-      )}
-      {checkWaitOpponentMove() && (
-        <Heading as="h4" size="md">
-          Ждем ход соперника
-        </Heading>
-      )}
-    </RootStyled>
+        {isSearch && !checkYourMove() && !checkWaitOpponentMove() && (
+          <div onClick={onStopSearch} style={{ display: "contents" }}>
+            <Button
+              colorScheme="cyan"
+              isLoading
+              loadingText="Остановить"
+              // variant="outline"
+              spinnerPlacement="start"
+              isDisabled={false}
+              id="stopSearchButton"
+              variant="outline"
+            />
+          </div>
+        )}
+        {checkYourMove() && (
+          <Heading as="h4" size="md">
+            Ваш ход
+          </Heading>
+        )}
+        {checkWaitOpponentMove() && (
+          <Heading as="h4" size="md">
+            Ждем ход соперника
+          </Heading>
+        )}
+      </RootStyled>
+    </>
   )
 })
