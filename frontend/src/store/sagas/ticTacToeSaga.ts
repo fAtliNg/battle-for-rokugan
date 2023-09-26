@@ -23,7 +23,6 @@ export function* checkGameIdStart({
 }: ReturnType<typeof ticTacToeActions.checkGameId>): any {
   try {
     const { login } = yield select((state) => state.userInfo)
-    const { isSearch } = yield select((state) => state.ticTacToe)
     const { data } = yield call(gameGet, { gameId: payload })
     yield put(ticTacToeActions.setPlayerX(data.playerX))
     yield put(ticTacToeActions.setPlayerO(data.playerO))
@@ -64,8 +63,8 @@ export function* stopGame({
   payload,
 }: ReturnType<typeof ticTacToeActions.stopGame>): any {
   try {
-    yield call(gameDelete, payload)
     yield put(ticTacToeActions.setSearch(false))
+    yield call(gameDelete, payload)
   } catch (e: any) {
     console.log(e)
   }

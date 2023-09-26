@@ -3,7 +3,7 @@ import { call, put, select } from "redux-saga/effects"
 import { loginActions } from "../slice/loginSlice"
 import { loginService, signUpService } from "../../services/userService"
 import { routes } from "../../constants"
-import {userInfoActions} from "../slice/userInfoSlice";
+import { userInfoActions } from "../slice/userInfoSlice"
 
 export function* loginStart({
   payload,
