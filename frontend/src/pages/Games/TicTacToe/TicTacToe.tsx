@@ -1,5 +1,4 @@
-import React, { FC, memo, useEffect, useRef, useState } from "react"
-import { winPosition, includes, defaultPosition } from "./utils"
+import React, { FC, memo, useEffect } from "react"
 import {
   RootStyled,
   BoardStyled,
@@ -12,9 +11,11 @@ import {
   OStyled,
   WinnerBannerStyled,
   WrapWinnerStyled,
+  WrapPlayers,
+  OSmallStyled,
+  XSmallStyled,
 } from "./styles"
-import { getMove } from "./minimax"
-import { Button, Heading } from "@chakra-ui/react"
+import { Button, Heading, Text } from "@chakra-ui/react"
 import { useDispatch, useSelector } from "react-redux"
 import { RootState } from "../../../store"
 import { EGameStatus, ticTacToeActions } from "../../../store/slice/ticTacToe"
@@ -22,7 +23,6 @@ import { WithSubnavigation } from "../../../components/NavBar"
 
 export const TicTacToe: FC = memo(() => {
   const dispatch = useDispatch()
-  const ref = useRef()
   const {
     isSearch,
     status,
@@ -124,6 +124,23 @@ export const TicTacToe: FC = memo(() => {
     <>
       <WithSubnavigation />
       <RootStyled>
+        {
+          <WrapPlayers>
+            {playerX && playerO && (
+              <>
+                <div style={{ display: "flex" }}>
+                  <Text fontSize="md">{playerX}</Text>
+                  <XSmallStyled />
+                </div>
+                <div style={{ display: "flex" }}>
+                  {" "}
+                  <OSmallStyled />
+                  <Text fontSize="md">{playerO}</Text>
+                </div>
+              </>
+            )}
+          </WrapPlayers>
+        }
         <WrapBoardStyled>
           <BoardStyled />
           <TableStyled>

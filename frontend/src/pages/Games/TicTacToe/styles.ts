@@ -15,7 +15,14 @@ export const RootStyled = styled.div`
 export const WrapBoardStyled = styled.div`
   display: flex;
   justify-content: center;
-  margin-top: 200px;
+`
+
+export const WrapPlayers = styled.div`
+  margin-top: 180px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 24px;
 `
 
 export const BoardStyled = styled(Board)`
@@ -28,10 +35,24 @@ export const XStyled = styled(X)`
   height: 87px;
 `
 
+export const XSmallStyled = styled(X)`
+  position: relative;
+  width: 24px;
+  height: 24px;
+  margin-right: 4px;
+`
+
 export const OStyled = styled(O)`
   position: relative;
   width: 87px;
   height: 87px;
+`
+
+export const OSmallStyled = styled(O)`
+  position: relative;
+  width: 24px;
+  height: 24px;
+  margin-left: 4px;
 `
 
 export const TableStyled = styled.table`
