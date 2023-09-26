@@ -16,17 +16,18 @@ function App() {
           <Route path={routes.signUp} element={<SignUp />} />
           <Route path={routes.main} element={<PrivateRoute />}>
             <Route path={routes.ticTacToe} element={<TicTacToe />} />
-            <Route
-              path={routes.main}
-              element={
-                <GameMap
-                  data={mapData as any[]}
-                  onProvinceClick={(currentProvince) => {
-                    console.log(currentProvince)
-                  }}
-                />
-              }
-            />
+            <Route path={routes.main} element={<TicTacToe />} />
+            {/*<Route*/}
+            {/*  path={routes.main}*/}
+            {/*  element={*/}
+            {/*    <GameMap*/}
+            {/*      data={mapData as any[]}*/}
+            {/*      onProvinceClick={(currentProvince) => {*/}
+            {/*        console.log(currentProvince)*/}
+            {/*      }}*/}
+            {/*    />*/}
+            {/*  }*/}
+            {/*/>*/}
           </Route>
         </Routes>
       </BrowserRouter>

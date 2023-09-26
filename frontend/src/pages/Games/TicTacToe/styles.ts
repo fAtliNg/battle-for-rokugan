@@ -18,11 +18,12 @@ export const WrapBoardStyled = styled.div`
 `
 
 export const WrapPlayers = styled.div`
-  margin-top: 180px;
+  margin-top: 32px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   height: 24px;
+  padding: 0px 16px;
 `
 
 export const BoardStyled = styled(Board)`

@@ -179,7 +179,7 @@ export const TicTacToe: FC = memo(() => {
           )}
         </WrapBoardStyled>
         {!isSearch && !checkYourMove() && !checkWaitOpponentMove() && (
-          <Button colorScheme="blue" onClick={onStartSearch}>
+          <Button colorScheme="blue" onClick={onStartSearch} style={{ margin: "0px 16px" }}>
             Найти игру
           </Button>
         )}
@@ -194,6 +194,7 @@ export const TicTacToe: FC = memo(() => {
               isDisabled={false}
               id="stopSearchButton"
               variant="outline"
+              style={{ margin: "0px 16px" }}
             />
           </div>
         )}
