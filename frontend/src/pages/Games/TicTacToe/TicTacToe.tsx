@@ -44,6 +44,15 @@ export const TicTacToe: FC = memo(() => {
     return ""
   }
 
+  useEffect(() => {
+    const eventSource = new EventSource(
+        "https://clip-clop.ru/api/tick-tack-toe/sse"
+    )
+    eventSource.addEventListener('SSE EVENT NAME', e => {
+      console.log(23423, e)
+    })
+  }, [])
+
   const getWinner = () => {
     if (status === EGameStatus.X_WON) {
       return "X"
@@ -179,7 +188,11 @@ export const TicTacToe: FC = memo(() => {
           )}
         </WrapBoardStyled>
         {!isSearch && !checkYourMove() && !checkWaitOpponentMove() && (
-          <Button colorScheme="blue" onClick={onStartSearch} style={{ margin: "0px 16px" }}>
+          <Button
+            colorScheme="blue"
+            onClick={onStartSearch}
+            style={{ margin: "0px 16px" }}
+          >
             Найти игру
           </Button>
         )}
