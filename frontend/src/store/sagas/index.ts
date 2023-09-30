@@ -14,7 +14,7 @@ export function* rootSaga() {
   yield all([takeLatest(loginActions.signUpStart, signUpStart)])
 
   yield all([takeLatest(ticTacToeActions.searchGameStart, searchGameStart)])
-  yield all([takeLatest(ticTacToeActions.checkGameId, checkGameIdStart)])
+  // yield all([takeLatest(ticTacToeActions.checkGameId, checkGameIdStart)])
   yield all([takeLatest(ticTacToeActions.moveStart, moveStart)])
   yield all([takeLatest(ticTacToeActions.stopGame, stopGame)])
 }

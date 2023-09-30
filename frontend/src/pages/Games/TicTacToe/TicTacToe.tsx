@@ -17,9 +17,17 @@ import {
 } from "./styles"
 import { Button, Heading, Text } from "@chakra-ui/react"
 import { useDispatch, useSelector } from "react-redux"
-import { RootState } from "../../../store"
+import { RootState, store } from "../../../store"
 import { EGameStatus, ticTacToeActions } from "../../../store/slice/ticTacToe"
 import { WithSubnavigation } from "../../../components/NavBar"
+import {
+  EventSourceMessage,
+  EventStreamContentType,
+  fetchEventSource,
+} from "@microsoft/fetch-event-source"
+
+class RetriableError extends Error {}
+class FatalError extends Error {}
 
 export const TicTacToe: FC = memo(() => {
   const dispatch = useDispatch()
@@ -45,11 +53,64 @@ export const TicTacToe: FC = memo(() => {
   }
 
   useEffect(() => {
-    const eventSource = new EventSource(
-        "https://clip-clop.ru/api/tick-tack-toe/sse"
-    )
-    eventSource.addEventListener('SSE EVENT NAME', e => {
-      console.log(23423, e)
+    const ctrl = new AbortController()
+    fetchEventSource("/api/tick-tack-toe/sse", {
+      method: "GET",
+      headers: {
+        "Auth-Token": store.getState().userInfo.token,
+      },
+      signal: ctrl.signal,
+      async onopen(response) {
+        if (
+          response.ok &&
+          response.headers.get("content-type") === EventStreamContentType
+        ) {
+          return // everything's good
+        } else if (
+          response.status >= 400 &&
+          response.status < 500 &&
+          response.status !== 429
+        ) {
+          // client-side errors are usually non-retriable:
+          throw new FatalError()
+        } else {
+          throw new RetriableError()
+        }
+      },
+      onmessage(msg: EventSourceMessage) {
+        console.log(111, msg)
+        console.log(222, msg.event)
+        if (msg.event === "MESSAGE") {
+          const data = JSON.parse(msg.data)
+          if (data?.gameId) {
+            dispatch(ticTacToeActions.setGameId(data.gameId))
+          }
+          if (data?.playerO) {
+            dispatch(ticTacToeActions.setPlayerO(data.playerO))
+          }
+          if (data?.playerX) {
+            dispatch(ticTacToeActions.setPlayerX(data.playerX))
+          }
+          if (data?.position) {
+            dispatch(ticTacToeActions.setPosition(data?.position))
+          }
+          if (data?.status) {
+            dispatch(ticTacToeActions.setStatus(data?.status))
+          }
+        }
+      },
+      onclose() {
+        // if the server closes the connection unexpectedly, retry:
+        throw new RetriableError()
+      },
+      onerror(err) {
+        if (err instanceof FatalError) {
+          throw err // rethrow to stop the operation
+        } else {
+          // do nothing to automatically retry. You can also
+          // return a specific retry interval here.
+        }
+      },
     })
   }, [])
 
