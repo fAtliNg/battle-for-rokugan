@@ -59,8 +59,11 @@ export const TicTacToe: FC = memo(() => {
       headers: {
         "Auth-Token": store.getState().userInfo.token,
       },
+      openWhenHidden: true,
       signal: ctrl.signal,
       async onopen(response) {
+        console.log("response:", response)
+        console.log("content-type:", response.headers.get("content-type"))
         if (
           response.ok &&
           response.headers.get("content-type") === EventStreamContentType
@@ -78,10 +81,9 @@ export const TicTacToe: FC = memo(() => {
         }
       },
       onmessage(msg: EventSourceMessage) {
-        console.log(111, msg)
-        console.log(222, msg.event)
         if (msg.event === "MESSAGE") {
           const data = JSON.parse(msg.data)
+          console.log("SSE MESSAGE:", data)
           if (data?.gameId) {
             dispatch(ticTacToeActions.setGameId(data.gameId))
           }
@@ -100,10 +102,12 @@ export const TicTacToe: FC = memo(() => {
         }
       },
       onclose() {
+        console.log("onclose")
         // if the server closes the connection unexpectedly, retry:
         throw new RetriableError()
       },
       onerror(err) {
+        console.log("error:", err)
         if (err instanceof FatalError) {
           throw err // rethrow to stop the operation
         } else {

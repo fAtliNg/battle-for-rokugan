@@ -59,6 +59,9 @@ export const ticTacToeSlice = createSlice({
     },
     setStatus: (state, { payload }: PayloadAction<EGameStatus>) => {
       state.status = payload
+      if ([EGameStatus.DRAW, EGameStatus.WAIT_X_MOVE, EGameStatus.WAIT_O_MOVE, EGameStatus.O_WON, EGameStatus.X_WON].includes(payload)) {
+        state.isSearch = false
+      }
     },
     setPosition: (
       state,
