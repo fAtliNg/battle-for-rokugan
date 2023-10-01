@@ -54,7 +54,7 @@ export const TicTacToe: FC = memo(() => {
 
   useEffect(() => {
     const ctrl = new AbortController()
-    fetchEventSource("/api/tick-tack-toe/sse", {
+    fetchEventSource("/api/sse", {
       method: "GET",
       headers: {
         "Auth-Token": store.getState().userInfo.token,

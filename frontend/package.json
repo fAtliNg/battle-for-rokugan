@@ -80,6 +80,5 @@
     "eslint-plugin-react-hooks": "4.6.0",
     "eslint-plugin-storybook": "0.6.10",
     "prettier": "^2.8.3"
-  },
-  "proxy": "https://clip-clop.ru"
+  }
 }
