@@ -25,6 +25,8 @@ import {
   EventStreamContentType,
   fetchEventSource,
 } from "@microsoft/fetch-event-source"
+import { startGamePlay } from "../../../utils/audio"
+import { checkAudio } from "./utils"
 
 class RetriableError extends Error {}
 class FatalError extends Error {}
@@ -84,6 +86,7 @@ export const TicTacToe: FC = memo(() => {
         if (msg.event === "MESSAGE") {
           const data = JSON.parse(msg.data)
           console.log("SSE MESSAGE:", data)
+          checkAudio(data)
           if (data?.gameId) {
             dispatch(ticTacToeActions.setGameId(data.gameId))
           }

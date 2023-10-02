@@ -18,7 +18,7 @@ export interface ITicTacToeState {
   position: { fields: string[][] }
 }
 
-const defaultPosition = {
+export const defaultPosition = {
   fields: [
     ["EMPTY", "EMPTY", "EMPTY"],
     ["EMPTY", "EMPTY", "EMPTY"],
@@ -50,7 +50,9 @@ export const ticTacToeSlice = createSlice({
       state.gameId = payload
     },
     checkGameId: (state, {}: PayloadAction<string>) => {},
-    stopGame: (state, {}: PayloadAction<string>) => {},
+    stopGame: (state, {}: PayloadAction<string>) => {
+      return initialState
+    },
     setPlayerX: (state, { payload }: PayloadAction<string>) => {
       state.playerX = payload
     },
@@ -59,7 +61,15 @@ export const ticTacToeSlice = createSlice({
     },
     setStatus: (state, { payload }: PayloadAction<EGameStatus>) => {
       state.status = payload
-      if ([EGameStatus.DRAW, EGameStatus.WAIT_X_MOVE, EGameStatus.WAIT_O_MOVE, EGameStatus.O_WON, EGameStatus.X_WON].includes(payload)) {
+      if (
+        [
+          EGameStatus.DRAW,
+          EGameStatus.WAIT_X_MOVE,
+          EGameStatus.WAIT_O_MOVE,
+          EGameStatus.O_WON,
+          EGameStatus.X_WON,
+        ].includes(payload)
+      ) {
         state.isSearch = false
       }
     },

@@ -6,10 +6,12 @@ import { Login } from "./pages/Login"
 import { SignUp } from "./pages/SignUp"
 import { PrivateRoute } from "./components/PrivateRoute"
 import { TicTacToe } from "./pages/Games"
+import { Audio } from "./components/Audio/Audio"
 
 function App() {
   return (
     <div className="App">
+      <Audio />
       <BrowserRouter>
         <Routes>
           <Route path={routes.login} element={<Login />} />

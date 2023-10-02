@@ -3,6 +3,7 @@ import createSagaMiddleware from "redux-saga"
 import loginReducer from "./slice/loginSlice"
 import userInfoReducer from "./slice/userInfoSlice"
 import ticTacToeReducer from "./slice/ticTacToe"
+import commonReducer from "./slice/common"
 import { rootSaga } from "./sagas"
 import { loadFromLocalStorage, saveToLocalStorage } from "./localStorage"
 import { authInterceptor } from "./authInterceptor"
@@ -14,6 +15,7 @@ export const store = configureStore({
     login: loginReducer,
     userInfo: userInfoReducer,
     ticTacToe: ticTacToeReducer,
+    common: commonReducer,
   },
   preloadedState: loadFromLocalStorage(),
   middleware: (getDefaultMiddleware) => {
