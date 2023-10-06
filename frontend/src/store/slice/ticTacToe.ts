@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
+import { IMoveRequest } from "../../services/tiaTacToeService"
 
 export enum EGameStatus {
   WAIT_X_MOVE = "WAIT_X_MOVE",
@@ -16,6 +17,7 @@ export interface ITicTacToeState {
   playerX: string
   status: EGameStatus
   position: { fields: string[][] }
+  isLoading: boolean
 }
 
 export const defaultPosition = {
@@ -33,6 +35,7 @@ const initialState: ITicTacToeState = {
   playerX: "",
   status: EGameStatus.UNKNOWN,
   position: defaultPosition,
+  isLoading: false,
 }
 
 export const ticTacToeSlice = createSlice({
@@ -45,9 +48,56 @@ export const ticTacToeSlice = createSlice({
     searchGameStart: (state) => {
       state.isSearch = true
     },
-    moveStart: (state, {}: PayloadAction<ITicTacToeState>) => {},
+    moveStart: (state, { payload }: PayloadAction<IMoveRequest>) => {
+      state.position = payload.position
+      if (state.status === EGameStatus.WAIT_X_MOVE) {
+        state.status = EGameStatus.WAIT_O_MOVE
+      }
+      if (state.status === EGameStatus.WAIT_O_MOVE) {
+        state.status = EGameStatus.WAIT_X_MOVE
+      }
+      state.isLoading = true
+    },
+    moveSuccess: (
+      state,
+      { payload }: PayloadAction<{ fields: string[][] }>
+    ) => {
+      state.position = payload
+      state.isLoading = false
+    },
+    moveFail: (state) => {
+      state.isLoading = false
+    },
     setGameId: (state, { payload }: PayloadAction<string>) => {
       state.gameId = payload
+    },
+    setSseData: (
+      state,
+      {
+        payload: { gameId, playerO, playerX, position, status },
+      }: PayloadAction<Partial<ITicTacToeState>>
+    ) => {
+      state.gameId = gameId || ""
+      state.playerO = playerO || ""
+      state.playerX = playerX || ""
+      if (position) {
+        state.position = position
+      }
+      if (status) {
+        state.status = status
+      }
+      if (
+        status &&
+        [
+          EGameStatus.DRAW,
+          EGameStatus.WAIT_X_MOVE,
+          EGameStatus.WAIT_O_MOVE,
+          EGameStatus.O_WON,
+          EGameStatus.X_WON,
+        ].includes(status)
+      ) {
+        state.isSearch = false
+      }
     },
     checkGameId: (state, {}: PayloadAction<string>) => {},
     stopGame: (state, {}: PayloadAction<string>) => {

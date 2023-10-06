@@ -26,6 +26,7 @@ import {
   fetchEventSource,
 } from "@microsoft/fetch-event-source"
 import { checkAudio } from "./utils"
+import { movePlay } from "../../../utils/audio"
 
 class RetriableError extends Error {}
 class FatalError extends Error {}
@@ -39,6 +40,7 @@ export const TicTacToe: FC = memo(() => {
     playerO,
     gameId,
     position: { fields: position },
+    isLoading,
   } = useSelector((state: RootState) => state.ticTacToe)
   const { login } = useSelector((state: RootState) => state.userInfo)
 
@@ -82,26 +84,12 @@ export const TicTacToe: FC = memo(() => {
         }
       },
       onmessage(msg: EventSourceMessage) {
-        console.log(123, msg)
+        console.log("onmessage")
         if (msg.event === "MESSAGE") {
           const data = JSON.parse(msg.data)
           console.log("SSE MESSAGE:", data)
           checkAudio(data)
-          if (data?.gameId) {
-            dispatch(ticTacToeActions.setGameId(data.gameId))
-          }
-          if (data?.playerO) {
-            dispatch(ticTacToeActions.setPlayerO(data.playerO))
-          }
-          if (data?.playerX) {
-            dispatch(ticTacToeActions.setPlayerX(data.playerX))
-          }
-          if (data?.position) {
-            dispatch(ticTacToeActions.setPosition(data?.position))
-          }
-          if (data?.status) {
-            dispatch(ticTacToeActions.setStatus(data?.status))
-          }
+          dispatch(ticTacToeActions.setSseData(data))
         }
       },
       onclose() {
@@ -159,18 +147,24 @@ export const TicTacToe: FC = memo(() => {
   }
 
   const onClickItem = (row: number, item: number) => {
-    if (position[row][item] !== "EMPTY" || getWinner() || !checkYourMove()) {
+    if (
+      position[row][item] !== "EMPTY" ||
+      getWinner() ||
+      !checkYourMove() ||
+      isLoading
+    ) {
       return
     }
     const newPosition = getNewPosition(position, row, item)
+    console.log("movePayload:", {
+      gameId,
+      position: { fields: newPosition },
+    })
+    movePlay()
     dispatch(
       ticTacToeActions.moveStart({
         gameId,
-        playerO,
         position: { fields: newPosition },
-        playerX,
-        status,
-        isSearch,
       })
     )
   }

@@ -1,12 +1,7 @@
 import { all, takeLatest } from "redux-saga/effects"
 import { loginActions } from "../slice/loginSlice"
 import { loginStart, signUpStart } from "./loginSaga"
-import {
-  checkGameIdStart,
-  moveStart,
-  searchGameStart,
-  stopGame,
-} from "./ticTacToeSaga"
+import { moveStart, searchGameStart, stopGame } from "./ticTacToeSaga"
 import { ticTacToeActions } from "../slice/ticTacToe"
 
 export function* rootSaga() {
@@ -14,7 +9,6 @@ export function* rootSaga() {
   yield all([takeLatest(loginActions.signUpStart, signUpStart)])
 
   yield all([takeLatest(ticTacToeActions.searchGameStart, searchGameStart)])
-  // yield all([takeLatest(ticTacToeActions.checkGameId, checkGameIdStart)])
   yield all([takeLatest(ticTacToeActions.moveStart, moveStart)])
   yield all([takeLatest(ticTacToeActions.stopGame, stopGame)])
 }

@@ -15,15 +15,8 @@ export const checkAudio = (data: any) => {
     ) {
       startGamePlay()
     } else if (
-      [
-        EGameStatus.WAIT_X_MOVE,
-        EGameStatus.WAIT_O_MOVE,
-        EGameStatus.X_WON,
-        EGameStatus.O_WON,
-        EGameStatus.DRAW,
-      ].includes(data?.status) &&
       JSON.stringify(defaultPosition) !== JSON.stringify(data?.position) &&
-      JSON.stringify(store.getState().ticTacToe.position.fields) !==
+      JSON.stringify(store.getState().ticTacToe.position) !==
         JSON.stringify(data?.position)
     ) {
       movePlay()
