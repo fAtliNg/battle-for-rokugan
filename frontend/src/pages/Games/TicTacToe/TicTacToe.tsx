@@ -27,6 +27,7 @@ import {
 } from "@microsoft/fetch-event-source"
 import { checkAudio } from "./utils"
 import { movePlay } from "../../../utils/audio"
+import { Chat } from "./Chat"
 
 class RetriableError extends Error {}
 class FatalError extends Error {}
@@ -56,6 +57,9 @@ export const TicTacToe: FC = memo(() => {
   }
 
   useEffect(() => {
+    if (window.location.port === "3000") {
+      return
+    }
     const ctrl = new AbortController()
     fetchEventSource("/api/sse", {
       method: "GET",
@@ -85,11 +89,21 @@ export const TicTacToe: FC = memo(() => {
       },
       onmessage(msg: EventSourceMessage) {
         console.log("onmessage")
-        if (msg.event === "MESSAGE") {
+        if (msg.event === "GAME") {
           const data = JSON.parse(msg.data)
-          console.log("SSE MESSAGE:", data)
+          console.log("SSE GAME MESSAGE:", data)
           checkAudio(data)
           dispatch(ticTacToeActions.setSseData(data))
+        }
+        if (msg.event === "CHAT") {
+          const data = JSON.parse(msg.data)
+          dispatch(
+            ticTacToeActions.addMessage({
+              author: data?.author,
+              message: data?.message,
+            })
+          )
+          console.log("SSE CHAT MESSAGE:", data)
         }
       },
       onclose() {
@@ -212,77 +226,85 @@ export const TicTacToe: FC = memo(() => {
             )}
           </WrapPlayers>
         }
-        <WrapBoardStyled>
-          <BoardStyled />
-          <TableStyled>
-            <TBodyStyled>
-              {position.map((row, rowIndex) => (
-                <TRStyled>
-                  {row.map((item, itemIndex) => (
-                    <TDStyled onClick={() => onClickItem(rowIndex, itemIndex)}>
-                      {item === "X" ? (
-                        <XStyled />
-                      ) : item === "O" ? (
-                        <OStyled />
-                      ) : (
-                        ""
-                      )}
-                    </TDStyled>
+        <div style={{ display: "flex", gap: 32, justifyContent: "center" }}>
+          <Chat />
+          <div style={{ display: "flex", flexDirection: "column", gap: 32 }}>
+            <WrapBoardStyled>
+              <BoardStyled />
+              <TableStyled>
+                <TBodyStyled>
+                  {position.map((row, rowIndex) => (
+                    <TRStyled>
+                      {row.map((item, itemIndex) => (
+                        <TDStyled
+                          onClick={() => onClickItem(rowIndex, itemIndex)}
+                        >
+                          {item === "X" ? (
+                            <XStyled />
+                          ) : item === "O" ? (
+                            <OStyled />
+                          ) : (
+                            ""
+                          )}
+                        </TDStyled>
+                      ))}
+                    </TRStyled>
                   ))}
-                </TRStyled>
-              ))}
-            </TBodyStyled>
-          </TableStyled>
-          {(getWinner() || !getWhoMove()) && isFinishGame() && (
-            <WinnerBannerStyled>
-              <WrapWinnerStyled>
-                {(getWinner() === "X" || getWinner() === EGameStatus.DRAW) && (
-                  <XStyled />
-                )}
-                {(getWinner() === "O" || getWinner() === EGameStatus.DRAW) && (
-                  <OStyled />
-                )}
-              </WrapWinnerStyled>
-              <Heading as="h2" size="xl" noOfLines={1} color="green.900">
-                {getWinner() === EGameStatus.DRAW ? "Ничья!" : "Победитель!"}
+                </TBodyStyled>
+              </TableStyled>
+              {(getWinner() || !getWhoMove()) && isFinishGame() && (
+                <WinnerBannerStyled>
+                  <WrapWinnerStyled>
+                    {(getWinner() === "X" ||
+                      getWinner() === EGameStatus.DRAW) && <XStyled />}
+                    {(getWinner() === "O" ||
+                      getWinner() === EGameStatus.DRAW) && <OStyled />}
+                  </WrapWinnerStyled>
+                  <Heading as="h2" size="xl" noOfLines={1} color="green.900">
+                    {getWinner() === EGameStatus.DRAW
+                      ? "Ничья!"
+                      : "Победитель!"}
+                  </Heading>
+                </WinnerBannerStyled>
+              )}
+            </WrapBoardStyled>
+            {!isSearch && !checkYourMove() && !checkWaitOpponentMove() && (
+              <Button
+                colorScheme="blue"
+                onClick={onStartSearch}
+                style={{ margin: "0px 16px" }}
+              >
+                Найти игру
+              </Button>
+            )}
+            {isSearch && !checkYourMove() && !checkWaitOpponentMove() && (
+              <div onClick={onStopSearch} style={{ display: "contents" }}>
+                <Button
+                  colorScheme="cyan"
+                  isLoading
+                  loadingText="Остановить"
+                  // variant="outline"
+                  spinnerPlacement="start"
+                  isDisabled={false}
+                  id="stopSearchButton"
+                  variant="outline"
+                  style={{ margin: "0px 16px" }}
+                />
+              </div>
+            )}
+            {checkYourMove() && (
+              <Heading as="h4" size="md">
+                Ваш ход
               </Heading>
-            </WinnerBannerStyled>
-          )}
-        </WrapBoardStyled>
-        {!isSearch && !checkYourMove() && !checkWaitOpponentMove() && (
-          <Button
-            colorScheme="blue"
-            onClick={onStartSearch}
-            style={{ margin: "0px 16px" }}
-          >
-            Найти игру
-          </Button>
-        )}
-        {isSearch && !checkYourMove() && !checkWaitOpponentMove() && (
-          <div onClick={onStopSearch} style={{ display: "contents" }}>
-            <Button
-              colorScheme="cyan"
-              isLoading
-              loadingText="Остановить"
-              // variant="outline"
-              spinnerPlacement="start"
-              isDisabled={false}
-              id="stopSearchButton"
-              variant="outline"
-              style={{ margin: "0px 16px" }}
-            />
+            )}
+            {checkWaitOpponentMove() && (
+              <Heading as="h4" size="md">
+                Ждем ход соперника
+              </Heading>
+            )}
           </div>
-        )}
-        {checkYourMove() && (
-          <Heading as="h4" size="md">
-            Ваш ход
-          </Heading>
-        )}
-        {checkWaitOpponentMove() && (
-          <Heading as="h4" size="md">
-            Ждем ход соперника
-          </Heading>
-        )}
+          <div style={{ width: 350 }} />
+        </div>
       </RootStyled>
     </>
   )

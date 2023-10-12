@@ -9,6 +9,11 @@ export interface IMoveRequest {
   position: { fields: string[][] }
 }
 
+export interface ISendMessageRequest {
+  gameId: string
+  message: string
+}
+
 export const gameJoin = () => axiosInstance.get(`/api/game/join`)
 
 export const gameGet = (body: IGameGetPayload) =>
@@ -19,3 +24,10 @@ export const gameDelete = (gameId: string) =>
 
 export const move = (body: IMoveRequest) =>
   axiosInstance.put(`/api/game/move`, body)
+
+export const sendMessage = (body: ISendMessageRequest) =>
+  axiosInstance.put(`/api/game/chat`, body, {
+    headers: {
+      "Game-Type": "Tic-Tac-Toe",
+    },
+  })

@@ -8,7 +8,6 @@ export const RootStyled = styled.div`
   text-align: center;
   gap: 32px;
   flex-direction: column;
-  width: 300px;
   margin: auto;
 `
 

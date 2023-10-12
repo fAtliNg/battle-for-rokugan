@@ -1,5 +1,8 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { IMoveRequest } from "../../services/tiaTacToeService"
+import {
+  IMoveRequest,
+  ISendMessageRequest,
+} from "../../services/tiaTacToeService"
 
 export enum EGameStatus {
   WAIT_X_MOVE = "WAIT_X_MOVE",
@@ -10,6 +13,11 @@ export enum EGameStatus {
   UNKNOWN = "UNKNOWN",
 }
 
+type TMessage = {
+  author: string
+  message: string
+}
+
 export interface ITicTacToeState {
   isSearch: boolean
   gameId: string
@@ -18,6 +26,7 @@ export interface ITicTacToeState {
   status: EGameStatus
   position: { fields: string[][] }
   isLoading: boolean
+  messages: TMessage[]
 }
 
 export const defaultPosition = {
@@ -36,6 +45,7 @@ const initialState: ITicTacToeState = {
   status: EGameStatus.UNKNOWN,
   position: defaultPosition,
   isLoading: false,
+  messages: [],
 }
 
 export const ticTacToeSlice = createSlice({
@@ -128,6 +138,10 @@ export const ticTacToeSlice = createSlice({
       { payload }: PayloadAction<{ fields: string[][] }>
     ) => {
       state.position = payload
+    },
+    sendMessage: (state, {}: PayloadAction<ISendMessageRequest>) => {},
+    addMessage: (state, { payload }: PayloadAction<TMessage>) => {
+      state.messages = state.messages.concat(payload)
     },
     clear: () => {
       return initialState

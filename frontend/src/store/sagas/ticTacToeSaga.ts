@@ -1,6 +1,11 @@
 import { call, put } from "redux-saga/effects"
 import { ticTacToeActions } from "../slice/ticTacToe"
-import { gameJoin, move, gameDelete } from "../../services/tiaTacToeService"
+import {
+  gameJoin,
+  move,
+  gameDelete,
+  sendMessage,
+} from "../../services/tiaTacToeService"
 
 export function* searchGameStart() {
   try {
@@ -31,6 +36,16 @@ export function* stopGame({
   try {
     yield put(ticTacToeActions.setSearch(false))
     yield call(gameDelete, payload)
+  } catch (e: any) {
+    console.log(e)
+  }
+}
+
+export function* sendMessageSaga({
+  payload,
+}: ReturnType<typeof ticTacToeActions.sendMessage>): any {
+  try {
+    yield call(sendMessage, payload)
   } catch (e: any) {
     console.log(e)
   }
