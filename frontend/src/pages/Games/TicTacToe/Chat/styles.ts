@@ -16,9 +16,10 @@ export const MessagesStyled = styled.div`
   overflow: scroll;
 `
 
-export const WrapMessageStyled = styled.div`
+export const WrapMessageStyled = styled.div<{ currentUser?: boolean }>`
   text-align: left;
-  padding: 4px 12px;
+  padding: ${(props) => (props.currentUser ? "4px 13px 4px 10px" : "4px 13px 4px 13px")};
+  ${(props) => (props.currentUser ? "border-left: 3px solid #7daa49" : "")};
 `
 
 export const LoginStyled = styled.span`

@@ -28,6 +28,7 @@ import {
 import { checkAudio } from "./utils"
 import { movePlay } from "../../../utils/audio"
 import { Chat } from "./Chat"
+import { AllTimeScore } from "./AllTimeScore"
 
 class RetriableError extends Error {}
 class FatalError extends Error {}
@@ -206,8 +207,6 @@ export const TicTacToe: FC = memo(() => {
       (status === EGameStatus.WAIT_O_MOVE && playerO !== login)
     )
   }
-  dispatch(ticTacToeActions.setPlayerX("sfasf"))
-  dispatch(ticTacToeActions.setPlayerO("sfvzxxzv"))
 
   return (
     <>
@@ -318,7 +317,7 @@ export const TicTacToe: FC = memo(() => {
               </Heading>
             )}
           </div>
-          {isLargerThan1080 && <div style={{ width: 350 }} />}
+          {isLargerThan1080 && <AllTimeScore />}
         </div>
       </RootStyled>
     </>
