@@ -10,6 +10,7 @@ import {
 import { useDispatch, useSelector } from "react-redux"
 import { RootState } from "../../../../store"
 import { ticTacToeActions } from "../../../../store/slice/ticTacToe"
+import { useMediaQuery } from "@chakra-ui/react"
 
 export const Chat: FC = memo(() => {
   const dispatch = useDispatch()
@@ -18,6 +19,7 @@ export const Chat: FC = memo(() => {
   )
   const [message, setMessage] = useState("")
   const [showPlaceholder, setShowPlaceholder] = useState(true)
+  const [isLargerThan680] = useMediaQuery("(min-width: 680px)")
 
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
     setMessage(e.target.value)
@@ -31,8 +33,12 @@ export const Chat: FC = memo(() => {
     }
   }
 
+  if (!isLargerThan680 && (!gameId || !playerX || !playerO)) {
+    return <></>
+  }
+
   return (
-    <RootStyled>
+    <RootStyled style={{ width: isLargerThan680 ? 350 : 268 }}>
       <MessagesStyled>
         {messages.map((message) => (
           <WrapMessageStyled>

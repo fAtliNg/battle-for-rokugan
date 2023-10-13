@@ -15,7 +15,7 @@ import {
   OSmallStyled,
   XSmallStyled,
 } from "./styles"
-import { Button, Heading, Text } from "@chakra-ui/react"
+import { Button, Heading, Text, useMediaQuery } from "@chakra-ui/react"
 import { useDispatch, useSelector } from "react-redux"
 import { RootState, store } from "../../../store"
 import { EGameStatus, ticTacToeActions } from "../../../store/slice/ticTacToe"
@@ -44,6 +44,8 @@ export const TicTacToe: FC = memo(() => {
     isLoading,
   } = useSelector((state: RootState) => state.ticTacToe)
   const { login } = useSelector((state: RootState) => state.userInfo)
+  const [isLargerThan1080] = useMediaQuery("(min-width: 1080px)")
+  const [isLargerThan680] = useMediaQuery("(min-width: 680px)")
 
   const getWhoMove = () => {
     if (status === EGameStatus.WAIT_X_MOVE) {
@@ -204,31 +206,39 @@ export const TicTacToe: FC = memo(() => {
       (status === EGameStatus.WAIT_O_MOVE && playerO !== login)
     )
   }
+  dispatch(ticTacToeActions.setPlayerX("sfasf"))
+  dispatch(ticTacToeActions.setPlayerO("sfvzxxzv"))
 
   return (
     <>
       <WithSubnavigation />
       <RootStyled>
-        {
-          <WrapPlayers>
-            {playerX && playerO && (
-              <>
-                <div style={{ display: "flex" }}>
-                  <Text fontSize="md">{playerX}</Text>
-                  <XSmallStyled />
-                </div>
-                <div style={{ display: "flex" }}>
-                  {" "}
-                  <OSmallStyled />
-                  <Text fontSize="md">{playerO}</Text>
-                </div>
-              </>
-            )}
-          </WrapPlayers>
-        }
-        <div style={{ display: "flex", gap: 32, justifyContent: "center" }}>
-          <Chat />
+        <div
+          style={{
+            display: "flex",
+            gap: 32,
+            justifyContent: "center",
+            flexDirection: isLargerThan680 ? undefined : "column-reverse",
+            marginTop: 32,
+          }}
+        >
+          {isLargerThan680 && <Chat />}
           <div style={{ display: "flex", flexDirection: "column", gap: 32 }}>
+            <WrapPlayers>
+              {playerX && playerO && (
+                <>
+                  <div style={{ display: "flex" }}>
+                    <Text fontSize="md">{playerX}</Text>
+                    <XSmallStyled />
+                  </div>
+                  <div style={{ display: "flex" }}>
+                    {" "}
+                    <OSmallStyled />
+                    <Text fontSize="md">{playerO}</Text>
+                  </div>
+                </>
+              )}
+            </WrapPlayers>
             <WrapBoardStyled>
               <BoardStyled />
               <TableStyled>
@@ -268,11 +278,12 @@ export const TicTacToe: FC = memo(() => {
                 </WinnerBannerStyled>
               )}
             </WrapBoardStyled>
+            {!isLargerThan680 && <Chat />}
             {!isSearch && !checkYourMove() && !checkWaitOpponentMove() && (
               <Button
                 colorScheme="blue"
                 onClick={onStartSearch}
-                style={{ margin: "0px 16px" }}
+                style={{ margin: "0px 16px", width: 236, alignSelf: "center" }}
               >
                 Найти игру
               </Button>
@@ -288,7 +299,11 @@ export const TicTacToe: FC = memo(() => {
                   isDisabled={false}
                   id="stopSearchButton"
                   variant="outline"
-                  style={{ margin: "0px 16px" }}
+                  style={{
+                    margin: "0px 16px",
+                    width: 236,
+                    alignSelf: "center",
+                  }}
                 />
               </div>
             )}
@@ -303,7 +318,7 @@ export const TicTacToe: FC = memo(() => {
               </Heading>
             )}
           </div>
-          <div style={{ width: 350 }} />
+          {isLargerThan1080 && <div style={{ width: 350 }} />}
         </div>
       </RootStyled>
     </>

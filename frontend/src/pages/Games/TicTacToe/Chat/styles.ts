@@ -1,13 +1,14 @@
 import styled from "styled-components"
 
 export const RootStyled = styled.div`
-  width: 350px;
-  height: 340px;
+  //width: 350px;
+  height: 395px;
   box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2),
     0 1px 5px 0 rgba(0, 0, 0, 0.12);
   display: flex;
   justify-content: space-between;
   flex-direction: column;
+  align-self: center;
 `
 
 export const MessagesStyled = styled.div`

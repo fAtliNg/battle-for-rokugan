@@ -9,6 +9,7 @@ export const RootStyled = styled.div`
   gap: 32px;
   flex-direction: column;
   margin: auto;
+  margin-bottom: 32px;
 `
 
 export const WrapBoardStyled = styled.div`
@@ -17,12 +18,14 @@ export const WrapBoardStyled = styled.div`
 `
 
 export const WrapPlayers = styled.div`
-  margin-top: 32px;
+  //margin-top: 32px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   height: 24px;
   padding: 0px 16px;
+  width: 268px;
+  align-self: center;
 `
 
 export const BoardStyled = styled(Board)`
