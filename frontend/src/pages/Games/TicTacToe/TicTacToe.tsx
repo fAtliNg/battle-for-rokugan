@@ -20,7 +20,12 @@ import {
 import { Button, Heading, Text, useMediaQuery } from "@chakra-ui/react"
 import { useDispatch, useSelector } from "react-redux"
 import { RootState, store } from "../../../store"
-import {EGameStatus, IRatings, ticTacToeActions} from "../../../store/slice/ticTacToe"
+import {
+  defaultRating,
+  EGameStatus,
+  IRatings,
+  ticTacToeActions,
+} from "../../../store/slice/ticTacToe"
 import { WithSubnavigation } from "../../../components/NavBar"
 import {
   EventSourceMessage,
@@ -95,6 +100,8 @@ export const TicTacToe: FC = memo(() => {
       },
       onmessage(msg: EventSourceMessage) {
         console.log("onmessage")
+        const playerX = store.getState().ticTacToe.playerX
+        const playerO = store.getState().ticTacToe.playerO
         const data = JSON.parse(msg.data)
         console.log("SSE:", msg.event, data)
         if (msg.event === "GAME") {
@@ -107,21 +114,21 @@ export const TicTacToe: FC = memo(() => {
             ratingX: 0,
             ratingO: 0,
             newRatingX: 0,
-            newRatingO: 0
+            newRatingO: 0,
           }
-          if (data.firstPlayerLogin === playerX) {
+          if (data.firstPlayerLogin.toLowerCase() === playerX.toLowerCase()) {
             newRating.ratingX = data.firstPlayerOldRating
             newRating.newRatingX = data.firstPlayerNewRating
           }
-          if (data.firstPlayerLogin === playerO) {
+          if (data.firstPlayerLogin.toLowerCase() === playerO.toLowerCase()) {
             newRating.ratingO = data.firstPlayerOldRating
             newRating.newRatingO = data.firstPlayerNewRating
           }
-          if (data.secondPlayerLogin === playerX) {
+          if (data.secondPlayerLogin.toLowerCase() === playerX.toLowerCase()) {
             newRating.ratingX = data.secondPlayerOldRating
             newRating.newRatingX = data.secondPlayerNewRating
           }
-          if (data.secondPlayerLogin === playerO) {
+          if (data.secondPlayerLogin.toLowerCase() === playerO.toLowerCase()) {
             newRating.ratingO = data.secondPlayerOldRating
             newRating.newRatingO = data.secondPlayerNewRating
           }
@@ -218,6 +225,7 @@ export const TicTacToe: FC = memo(() => {
 
   const onStartSearch = () => {
     dispatch(ticTacToeActions.searchGameStart())
+    dispatch(ticTacToeActions.setRatings(defaultRating))
   }
 
   const onStopSearch = () => {

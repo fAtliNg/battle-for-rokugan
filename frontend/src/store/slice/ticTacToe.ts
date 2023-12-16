@@ -45,6 +45,13 @@ export const defaultPosition = {
   ],
 }
 
+export const defaultRating: IRatings = {
+  ratingO: 0,
+  ratingX: 0,
+  newRatingO: undefined,
+  newRatingX: undefined,
+}
+
 const initialState: ITicTacToeState = {
   isSearch: false,
   gameId: "",
@@ -54,12 +61,7 @@ const initialState: ITicTacToeState = {
   position: defaultPosition,
   isLoading: false,
   messages: [],
-  rating: {
-    ratingO: 0,
-    ratingX: 0,
-    newRatingO: undefined,
-    newRatingX: undefined,
-  },
+  rating: defaultRating,
 }
 
 export const ticTacToeSlice = createSlice({
