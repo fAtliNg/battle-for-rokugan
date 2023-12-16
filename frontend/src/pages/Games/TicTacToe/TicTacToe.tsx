@@ -14,11 +14,13 @@ import {
   WrapPlayers,
   OSmallStyled,
   XSmallStyled,
+  WinRatingStyled,
+  LoseRatingStyled,
 } from "./styles"
 import { Button, Heading, Text, useMediaQuery } from "@chakra-ui/react"
 import { useDispatch, useSelector } from "react-redux"
 import { RootState, store } from "../../../store"
-import { EGameStatus, ticTacToeActions } from "../../../store/slice/ticTacToe"
+import {EGameStatus, IRatings, ticTacToeActions} from "../../../store/slice/ticTacToe"
 import { WithSubnavigation } from "../../../components/NavBar"
 import {
   EventSourceMessage,
@@ -43,6 +45,7 @@ export const TicTacToe: FC = memo(() => {
     gameId,
     position: { fields: position },
     isLoading,
+    rating,
   } = useSelector((state: RootState) => state.ticTacToe)
   const { login } = useSelector((state: RootState) => state.userInfo)
   const [isLargerThan1080] = useMediaQuery("(min-width: 1080px)")
@@ -92,21 +95,48 @@ export const TicTacToe: FC = memo(() => {
       },
       onmessage(msg: EventSourceMessage) {
         console.log("onmessage")
+        const data = JSON.parse(msg.data)
+        console.log("SSE:", msg.event, data)
         if (msg.event === "GAME") {
-          const data = JSON.parse(msg.data)
-          console.log("SSE GAME MESSAGE:", data)
+          // const data = JSON.parse(msg.data)
           checkAudio(data)
           dispatch(ticTacToeActions.setSseData(data))
         }
+        if (msg.event === "RATINGS") {
+          const newRating: IRatings = {
+            ratingX: 0,
+            ratingO: 0,
+            newRatingX: 0,
+            newRatingO: 0
+          }
+          if (data.firstPlayerLogin === playerX) {
+            newRating.ratingX = data.firstPlayerOldRating
+            newRating.newRatingX = data.firstPlayerNewRating
+          }
+          if (data.firstPlayerLogin === playerO) {
+            newRating.ratingO = data.firstPlayerOldRating
+            newRating.newRatingO = data.firstPlayerNewRating
+          }
+          if (data.secondPlayerLogin === playerX) {
+            newRating.ratingX = data.secondPlayerOldRating
+            newRating.newRatingX = data.secondPlayerNewRating
+          }
+          if (data.secondPlayerLogin === playerO) {
+            newRating.ratingO = data.secondPlayerOldRating
+            newRating.newRatingO = data.secondPlayerNewRating
+          }
+
+          dispatch(ticTacToeActions.setRatings(newRating))
+        }
         if (msg.event === "CHAT") {
-          const data = JSON.parse(msg.data)
+          // const data = JSON.parse(msg.data)
           dispatch(
             ticTacToeActions.addMessage({
               author: data?.author,
               message: data?.message,
             })
           )
-          console.log("SSE CHAT MESSAGE:", data)
+          // console.log("SSE CHAT MESSAGE:", data)
         }
       },
       onclose() {
@@ -208,6 +238,18 @@ export const TicTacToe: FC = memo(() => {
     )
   }
 
+  const renderNewRating = (oldRating: number, newRating?: number) => {
+    if (!newRating) {
+      return <></>
+    } else if (oldRating < newRating) {
+      return <WinRatingStyled> +{newRating - oldRating}</WinRatingStyled>
+    } else if (oldRating > newRating) {
+      return <LoseRatingStyled> {newRating - oldRating}</LoseRatingStyled>
+    } else {
+      return " +0"
+    }
+  }
+
   return (
     <>
       <WithSubnavigation />
@@ -227,13 +269,18 @@ export const TicTacToe: FC = memo(() => {
               {playerX && playerO && (
                 <>
                   <div style={{ display: "flex" }}>
-                    <Text fontSize="md">{playerX}</Text>
                     <XSmallStyled />
+                    <Text fontSize="md">
+                      {playerX} ({rating.ratingX})
+                      {renderNewRating(rating.ratingX, rating.newRatingX)}
+                    </Text>
                   </div>
                   <div style={{ display: "flex" }}>
-                    {" "}
                     <OSmallStyled />
-                    <Text fontSize="md">{playerO}</Text>
+                    <Text fontSize="md">
+                      {playerO} ({rating.ratingO})
+                      {renderNewRating(rating.ratingO, rating.newRatingO)}
+                    </Text>
                   </div>
                 </>
               )}

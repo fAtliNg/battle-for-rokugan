@@ -27,6 +27,14 @@ export interface ITicTacToeState {
   position: { fields: string[][] }
   isLoading: boolean
   messages: TMessage[]
+  rating: IRatings
+}
+
+export interface IRatings {
+  ratingO: number
+  ratingX: number
+  newRatingO?: number
+  newRatingX?: number
 }
 
 export const defaultPosition = {
@@ -46,6 +54,12 @@ const initialState: ITicTacToeState = {
   position: defaultPosition,
   isLoading: false,
   messages: [],
+  rating: {
+    ratingO: 0,
+    ratingX: 0,
+    newRatingO: undefined,
+    newRatingX: undefined,
+  },
 }
 
 export const ticTacToeSlice = createSlice({
@@ -142,6 +156,9 @@ export const ticTacToeSlice = createSlice({
     sendMessage: (state, {}: PayloadAction<ISendMessageRequest>) => {},
     addMessage: (state, { payload }: PayloadAction<TMessage>) => {
       state.messages = state.messages.concat(payload)
+    },
+    setRatings: (state, { payload }: PayloadAction<IRatings>) => {
+      state.rating = payload
     },
     clear: () => {
       return initialState

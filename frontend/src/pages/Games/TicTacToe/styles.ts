@@ -19,7 +19,7 @@ export const WrapBoardStyled = styled.div`
 
 export const WrapPlayers = styled.div`
   //margin-top: 32px;
-  display: flex;
+  //display: flex;
   align-items: center;
   justify-content: space-between;
   height: 24px;
@@ -42,7 +42,6 @@ export const XSmallStyled = styled(X)`
   position: relative;
   width: 24px;
   height: 24px;
-  margin-right: 4px;
 `
 
 export const OStyled = styled(O)`
@@ -55,7 +54,6 @@ export const OSmallStyled = styled(O)`
   position: relative;
   width: 24px;
   height: 24px;
-  margin-left: 4px;
 `
 
 export const TableStyled = styled.table`
@@ -87,4 +85,11 @@ export const WinnerBannerStyled = styled.div`
 export const WrapWinnerStyled = styled.div`
   display: flex;
   margin-top: 40px;
+`
+
+export const WinRatingStyled = styled.span`
+  color: rgb(135, 228, 58);
+`
+export const LoseRatingStyled = styled.span`
+  color: rgb(245, 77, 98);
 `
